@@ -1,5 +1,5 @@
-import connectToDatabase from "../../server/utils/db"
-import Post from "../../server/models/post"
+import connectToDatabase from "../../../server/utils/db"
+import Layout from "../../../server/models/layout"
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -12,10 +12,65 @@ export default async function handler(req, res) {
         console.log('content_preview_requested event received');
 
         const data = payload.data.assets.structured_contents[0].content_body;
-        const description = data.fields_version.fields.description[0].field_values[0].rich_text_value;
-        const title = data.fields_version.fields.title[0].field_values[0].text_value
         const content_hash = data.fields_version.content_hash;
         const instance_guid = payload.data.organization.id;
+        const fields = data.fields_version.fields;
+        const mainCTA = fields.mainCTA[0].field_values[0].content_details.latest_fields_version.fields;
+        const mission = fields.missionSection[0].field_values[0].content_details.latest_fields_version.fields;
+        const vision = fields.visionSection[0].field_values[0].content_details.latest_fields_version.fields;
+        const products = fields.productsSection[0].field_values[0].content_details.latest_fields_version.fields;
+        const contactUs = fields.contactUsSection[0].field_values[0].content_details.latest_fields_version.fields;
+        const joinUs = fields.joinUsSection[0].field_values[0].content_details.latest_fields_version.fields;
+
+        const layoutData = {
+          mainCTA: {
+            title: mainCTA.title[0].field_values[0].text_value,
+            description: mainCTA.description[0].field_values[0].rich_text_value,
+            ctaText: mainCTA.cTAText[0].field_values[0].text_value,
+          },
+          mission: {
+            title: mission.title[0].field_values[0].text_value,
+            description: mission.description[0].field_values[0].rich_text_value,
+            video: mission.videoURL[0].field_values[0].data,
+          },
+          vision: {
+            ctas: vision.cTAs[0].field_values.map(value => {
+              const field = value.content_details.latest_fields_version.fields;
+
+              return {
+                title: field.title[0].field_values[0].text_value,
+                description: field.description[0].field_values[0].rich_text_value,
+                backgroundImage: 'test',
+              }
+            })
+          },
+          products: {
+            title: products.title[0].field_values[0].text_value,
+            description: products.description[0].field_values[0].rich_text_value,
+            slider: products.slider[0].field_values.map(value => {
+              const field = value.content_details.latest_fields_version.fields;
+
+              return {
+                title: field.title[0].field_values[0].text_value,
+                description: field.description[0].field_values[0].rich_text_value,
+                backgroundImage: 'test',
+              }
+            })
+          },
+          contactUs: {
+            title: contactUs.title[0].field_values[0].text_value,
+            description: contactUs.description[0].field_values[0].rich_text_value,
+            location: {
+              latitude: contactUs.location[0].field_values[0].latitude,
+              longitude: contactUs.location[0].field_values[0].longitude,
+            },
+            addressText: contactUs.addressText[0].field_values[0].rich_text_value,
+          },
+          joinUs: {
+            title: joinUs.title[0].field_values[0].text_value,
+            ctaText: joinUs.cTAText[0].field_values[0].text_value,
+          },
+        };
 
         const { token_type, access_token } = await fetch(isProduction ? 'https://accounts.newscred.com/o/oauth2/v1/token' : 'http://host.docker.internal:4001/o/oauth2/v1/token', {
           method: 'post',
@@ -58,16 +113,16 @@ export default async function handler(req, res) {
         console.log(`${acknowledgeLink} completed`);
 
         await connectToDatabase();
-        const post = await Post.create({
-          title,
-          description,
-        });
+        const layout = new Layout(layoutData);
+        const newLayout = await layout.save();
+
+        console.log(`Created Layout - ${newLayout._id}`);
 
         const completedResponse = await fetch(completeLink, {
           method: 'post',
           body: JSON.stringify({
             keyedPreviews: {
-              [post._id]: `https://test-blog-sepia.vercel.app/post/${post._id}`
+              [(new Date()).toUTCString()]: `https://test-blog-sepia.vercel.app/layout/${newLayout._id}`
             }
           }),
           headers: {
@@ -77,8 +132,8 @@ export default async function handler(req, res) {
         });
         if (completedResponse.status !== 202) {
           const error = await completedResponse.json();
-          console.log({ message: 'Could not trigger complete event', error });
-          res.status(500).json({ message: 'Could not trigger complete event', error });
+          console.log({ message: 'Could not trigger complete event', error: JSON.stringify(error) });
+          res.status(500).json({ message: 'Could not trigger complete event', error: JSON.stringify(error) });
           return;
         }
         console.log(`${completeLink} completed`);
