@@ -6,15 +6,16 @@ const LayoutPage = ({ layout }) => {
     mainCTA: {
       title: layout.mainCTA.title || 'Advancement is Omega',
       description: layout.mainCTA.description || 'Solving the problems of today to see a tomorrow worth living and a past worth remembering.',
-      ctaText: layout.mainCTA.ctaText,
-      image: '/images/hero-slider-01.jpg'
+      ctaText: layout.mainCTA.ctaText || 'Learn More',
+      image: layout.mainCTA.image || '/images/hero-slider-01.jpg'
     },
     mission: {
       title: layout.mission.title || 'Propel Advancement',
       description: layout.mission.description || 'Introducing the world’s first Advancement Company. As we enter the dawn of the digital age a significant \
       leap must be made to propel the world into the age of advancement.',
-      videoThumbnail: '/images/video-thumb.jpg',
+      videoThumbnail: layout.mission.videoThumbnail || '/images/video-thumb.jpg',
       video: layout.mission.video || 'https://www.youtube.com/embed/ResipmZmpDU?autoplay=1&showinfo=0&controls=0',
+      backgroundImage: layout.mission.backgroundImage || '/images/section-bg.jpg'
     },
     vision: {
       ctas: layout.vision.ctas.map(cta => ({
@@ -140,7 +141,7 @@ const LayoutPage = ({ layout }) => {
       </section>
       <section className="mission" id="mission">
         <div className="bg">
-          <img src="/images/section-bg.jpg" className="img-fluid" alt="section-bg" />
+          <img src={layoutData.mission.backgroundImage} className="img-fluid" alt="section-bg" />
         </div>
         <div className="right-shape">
           <img src="/images/right-shape.png" className="img-fluid" alt="right-shape" />
