@@ -67,12 +67,12 @@ export default async function handler(req, res) {
         console.log(`${acknowledgeLink} completed`);
 
         const fields = data.fields_version.fields;
-        const mainCTA = fields.mainCTA[0].field_values[0].content_details.latest_fields_version.fields;
-        const mission = fields.missionSection[0].field_values[0].content_details.latest_fields_version.fields;
-        const vision = fields.visionSection[0].field_values[0].content_details.latest_fields_version.fields;
-        const products = fields.productsSection[0].field_values[0].content_details.latest_fields_version.fields;
-        const contactUs = fields.contactUsSection[0].field_values[0].content_details.latest_fields_version.fields;
-        const joinUs = fields.joinUsSection[0].field_values[0].content_details.latest_fields_version.fields;
+        const mainCTA = fields.mainCTA?.[0].field_values[0].content_details.latest_fields_version.fields;
+        const mission = fields.missionSection?.[0].field_values[0].content_details.latest_fields_version.fields;
+        const vision = fields.visionSection?.[0].field_values[0].content_details.latest_fields_version.fields;
+        const products = fields.productsSection?.[0].field_values[0].content_details.latest_fields_version.fields;
+        const contactUs = fields.contactUsSection?.[0].field_values[0].content_details.latest_fields_version.fields;
+        const joinUs = fields.joinUsSection?.[0].field_values[0].content_details.latest_fields_version.fields;
 
         const getMainCTAData = async () => {
           const title = mainCTA.title[0].field_values[0].text_value;
@@ -123,9 +123,9 @@ export default async function handler(req, res) {
         };
 
         const layoutData = {
-          mainCTA: await getMainCTAData(),
-          mission: await getMissionData(),
-          vision: {
+          mainCTA: mainCTA && await getMainCTAData(),
+          mission: mission && await getMissionData(),
+          vision: vision && {
             ctas: vision.cTAs[0].field_values.map(value => {
               const field = value.content_details.latest_fields_version.fields;
 
@@ -136,7 +136,7 @@ export default async function handler(req, res) {
               }
             })
           },
-          products: {
+          products: products && {
             title: products.title[0].field_values[0].text_value,
             description: products.description[0].field_values[0].text_value,
             slider: products.slider[0].field_values.map(value => {
@@ -149,16 +149,16 @@ export default async function handler(req, res) {
               }
             })
           },
-          contactUs: {
+          contactUs: contactUs && {
             title: contactUs.title[0].field_values[0].text_value,
             description: contactUs.description[0].field_values[0].text_value,
             location: {
-              latitude: contactUs.location[0].field_values[0].latitude,
-              longitude: contactUs.location[0].field_values[0].longitude,
+              latitude: contactUs.location?.[0].field_values[0].latitude,
+              longitude: contactUs.location?.[0].field_values[0].longitude,
             },
             addressText: contactUs.addressText[0].field_values[0].text_value,
           },
-          joinUs: {
+          joinUs: joinUs && {
             title: joinUs.title[0].field_values[0].text_value,
             ctaText: joinUs.cTAText[0].field_values[0].text_value,
           },
