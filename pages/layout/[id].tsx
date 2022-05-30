@@ -4,32 +4,32 @@ import connectToDatabase from '../../server/utils/db';
 const LayoutPage = ({ layout }) => {
   const layoutData = {
     mainCTA: {
-      title: layout.mainCTA.title || 'Advancement is Omega',
-      description: layout.mainCTA.description || 'Solving the problems of today to see a tomorrow worth living and a past worth remembering.',
-      ctaText: layout.mainCTA.ctaText || 'Learn More',
-      image: layout.mainCTA.image || '/images/hero-slider-01.jpg'
+      title: layout.mainCTA?.title || 'Advancement is Omega',
+      description: layout.mainCTA?.description || 'Solving the problems of today to see a tomorrow worth living and a past worth remembering.',
+      ctaText: layout.mainCTA?.ctaText || 'Learn More',
+      image: layout.mainCTA?.image || '/images/hero-slider-01.jpg'
     },
     mission: {
-      title: layout.mission.title || 'Propel Advancement',
-      description: layout.mission.description || 'Introducing the world’s first Advancement Company. As we enter the dawn of the digital age a significant \
+      title: layout.mission?.title || 'Propel Advancement',
+      description: layout.mission?.description || 'Introducing the world’s first Advancement Company. As we enter the dawn of the digital age a significant \
       leap must be made to propel the world into the age of advancement.',
-      videoThumbnail: layout.mission.videoThumbnail || '/images/video-thumb.jpg',
-      video: layout.mission.video || 'https://www.youtube.com/embed/ResipmZmpDU?autoplay=1&showinfo=0&controls=0',
-      backgroundImage: layout.mission.backgroundImage || '/images/section-bg.jpg'
+      videoThumbnail: layout.mission?.videoThumbnail || '/images/video-thumb.jpg',
+      video: layout.mission?.video || 'https://www.youtube.com/embed/ResipmZmpDU?autoplay=1&showinfo=0&controls=0',
+      backgroundImage: layout.mission?.backgroundImage || '/images/section-bg.jpg'
     },
     vision: {
-      ctas: layout.vision.ctas.map(cta => ({
+      ctas: layout.vision?.ctas.map(cta => ({
         title: cta.title || 'People First',
         description: cta.description || 'I started with a vision of creating an atmosphere where people come first.',
         backgroundImage: '/images/vision-01.jpg',
       }))
     },
     products: {
-      title: layout.products.title || 'Some Of Our Best Products',
-      description: layout.products.description || 'See the innovation that has come through the Rio way. As an advancement company, the goal is to \
+      title: layout.products?.title || 'Some Of Our Best Products',
+      description: layout.products?.description || 'See the innovation that has come through the Rio way. As an advancement company, the goal is to \
       continuously find areas to help business push forward. Below you can find the first product available to \
       help you do so.',
-      slider: layout.products.slider.map(slide => ({
+      slider: layout.products?.slider.map(slide => ({
           title: slide.title || 'Objects',
           description: slide.description || 'Omega OS Version 2.0 is the world’s first and only cloud operating system. See how this \
           revolutionarys oftware can become the center of your business.',
@@ -37,27 +37,27 @@ const LayoutPage = ({ layout }) => {
       }))
     },
     contactUs: {
-      title: layout.contactUs.title || 'reach us',
-      description: layout.contactUs.description || 'The dawn of the digital age and the need for a significant leap forward is here. We believe that every \
+      title: layout.contactUs?.title || 'reach us',
+      description: layout.contactUs?.description || 'The dawn of the digital age and the need for a significant leap forward is here. We believe that every \
       business has the opportunity to move into this new age with the right mindset. Contact us today to begin \
       understanding how Omega can propel your business.',
       location: {
-        latitude: layout.contactUs.location.latitude,
-        longitude: layout.contactUs.location.longitude,
+        latitude: layout.contactUs?.location.latitude,
+        longitude: layout.contactUs?.location.longitude,
       },
       image: 'https://demo.gethugothemes.com/omega/site/images/map-bg.jpg',
-      addressText: layout.contactUs.addressText || '1001 Brickell bay, Dr. Miami, FL 33131',
+      addressText: layout.contactUs?.addressText || '1001 Brickell bay, Dr. Miami, FL 33131',
       socialLinks: {
-        facebook: layout.contactUs.socialLinks?.facebook || '#',
-        twitter: layout.contactUs.socialLinks?.twitter || '#',
-        instagram: layout.contactUs.socialLinks?.instagram || '#',
-        github: layout.contactUs.socialLinks?.github || '#',
-        linkedin: layout.contactUs.socialLinks?.linkedin || '#'
+        facebook: layout.contactUs?.socialLinks?.facebook || '#',
+        twitter: layout.contactUs?.socialLinks?.twitter || '#',
+        instagram: layout.contactUs?.socialLinks?.instagram || '#',
+        github: layout.contactUs?.socialLinks?.github || '#',
+        linkedin: layout.contactUs?.socialLinks?.linkedin || '#'
       },
     },
     joinUs: {
-      title: layout.joinUs.title || 'Join the Omega family.',
-      ctaText: layout.joinUs.ctaText || 'Click below to view the career opportunities we have for you.',
+      title: layout.joinUs?.title || 'Join the Omega family.',
+      ctaText: layout.joinUs?.ctaText || 'Click below to view the career opportunities we have for you.',
     },
   };
 
