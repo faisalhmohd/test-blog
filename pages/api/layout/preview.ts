@@ -5,6 +5,7 @@ const isProduction = process.env.NODE_ENV === 'production';
 
 async function _getAsset(fieldValue, token_type, access_token) {
   const getAssetUrl = fieldValue.links.self;
+  console.log('fetching image', getAssetUrl)
   return await fetch(getAssetUrl, {
     method: 'get',
     headers: {
